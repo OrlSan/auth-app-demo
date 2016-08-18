@@ -1,4 +1,5 @@
 var express = require('express'),
+    passport = require('passport'),
     logger = require('morgan'),
     bodyParser = require('body-parser');
     mongoose = require('mongoose');
@@ -7,6 +8,7 @@ var express = require('express'),
 var app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
+require('./config/passport')(passport);
 
 // conectar a la base de datos
 mongoose.connect('mongodb://localhost/authApp');
@@ -14,6 +16,7 @@ mongoose.connect('mongodb://localhost/authApp');
 // Importar los Routers
 var AuthRouter = require('./app/routes/AuthRouter');
 var RegisterRouter = require('./app/routes/RegisterRouter');
+var ProfileRouter = require('./app/routes/ProfileRouter');
 
 app.get('/', function(req, res) {
   res.json({ success: true });
@@ -27,6 +30,7 @@ app.post('/', function(req, res) {
 // Usar los Routers
 app.use('/auth', AuthRouter);
 app.use('/register', RegisterRouter);
+app.use('/profile', passport.authenticate('bearer', { session: false }), ProfileRouter);
 
 app.listen(8080, function() {
   console.log("Escuchando en el puerto 8080");
