@@ -8,11 +8,12 @@ var UserSchema = mongoose.Schema({
     unique: true,
     required: true
   },
+  token: String,
   password: String,
   age: Number
 });
 
-UserSchema.methods.generateHash = function(password, callback) {
+UserSchema.statics.generateHash = function(password, callback) {
   bcrypt.genSalt(10, function(err, salt) {
     if (err) {
       console.log("Error al crear el password: " + err);
@@ -24,7 +25,7 @@ UserSchema.methods.generateHash = function(password, callback) {
 };
 
 UserSchema.methods.checkPassword = function(inputPass, callback) {
-  bcrypt.compare(myPlaintextPassword, hash, callback);
+  bcrypt.compare(inputPass, this.password, callback);
 };
 
 // Exportamos el modelo

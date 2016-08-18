@@ -13,6 +13,7 @@ mongoose.connect('mongodb://localhost/authApp');
 
 // Importar los Routers
 var AuthRouter = require('./app/routes/AuthRouter');
+var RegisterRouter = require('./app/routes/RegisterRouter');
 
 app.get('/', function(req, res) {
   res.json({ success: true });
@@ -25,6 +26,7 @@ app.post('/', function(req, res) {
 
 // Usar los Routers
 app.use('/auth', AuthRouter);
+app.use('/register', RegisterRouter);
 
 app.listen(8080, function() {
   console.log("Escuchando en el puerto 8080");
