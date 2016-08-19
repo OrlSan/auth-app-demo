@@ -17,6 +17,7 @@ mongoose.connect('mongodb://localhost/authApp');
 var AuthRouter = require('./app/routes/AuthRouter');
 var RegisterRouter = require('./app/routes/RegisterRouter');
 var ProfileRouter = require('./app/routes/ProfileRouter');
+var NotesRouter = require('./app/routes/NotesRouter');
 
 app.get('/', function(req, res) {
   res.json({ success: true });
@@ -31,6 +32,8 @@ app.post('/', function(req, res) {
 app.use('/auth', AuthRouter);
 app.use('/register', RegisterRouter);
 app.use('/profile', passport.authenticate('bearer', { session: false }), ProfileRouter);
+app.use('/note', passport.authenticate('bearer', { session: false }), NotesRouter);
+
 
 app.listen(8080, function() {
   console.log("Escuchando en el puerto 8080");

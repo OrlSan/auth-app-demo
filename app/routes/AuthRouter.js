@@ -13,11 +13,17 @@ router.post('/', function(req, res) {
   User.findOne({ "email": req.body.email }, function(errFind, user) {
     if (errFind) {
       console.log("Error al buscar el usuario en la base de datos: " + errFind);
-      return res.json({ success: false, message: "Error en la base de datos" });
+      return res.status(500).json({
+        success: false,
+        message: "Error en la base de datos"
+      });
     }
 
     if (!user) {
-      return res.json({ success: false, message: "No existe el usuario con el correo electrónico " + req.body.email });
+      return res.json({
+        success: false,
+        message: "No existe el usuario con el email " + req.body.email
+      });
     }
 
     user.checkPassword(req.body.password, function(errPass, valid) {
@@ -33,7 +39,10 @@ router.post('/', function(req, res) {
 
         user.save(function(saveErr) {
           if (saveErr) {
-            return res.json({ success: false, message: "Internal DB error" });
+            return res.status(500).json({
+              success: false,
+              message: "Internal DB error"
+            });
           }
 
           return res.json({ success: true, token: user.token });
