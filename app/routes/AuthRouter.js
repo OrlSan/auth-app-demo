@@ -20,7 +20,7 @@ router.post('/', function(req, res) {
     }
 
     if (!user) {
-      return res.json({
+      return res.status(404).json({
         success: false,
         message: "No existe el usuario con el email " + req.body.email
       });
@@ -29,7 +29,10 @@ router.post('/', function(req, res) {
     user.checkPassword(req.body.password, function(errPass, valid) {
       if (errPass) {
         console.log("Error al comparar el password: " + errPass);
-        return res.json({ success: false, message: "Error en la contraseña" });
+        return res.status(500).json({
+          success: false,
+          message: "Error interno del servidor. Problema con la contraseña"
+        });
       }
 
       if (valid) {
@@ -48,7 +51,10 @@ router.post('/', function(req, res) {
           return res.json({ success: true, token: user.token });
         });
       } else {
-        return res.json({ success: false, message: "La contraseña no es válida" });
+        return res.status(401).json({
+          success: false,
+          message: "La contraseña no es válida"
+        });
       }
     });
   });
