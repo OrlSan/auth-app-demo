@@ -3,7 +3,7 @@ var router = express.Router();
 var Note = require('../models/Note');
 
 router.get('/', function(req, res) {
-  Note.find({ ownerID: req.user.id }, function(errSearch, notes) {
+  Note.find({ ownerID: req.user.id }).lean().exec(function(errSearch, notes) {
     if (errSearch) {
       return res.status(500).json({
         success: false,
@@ -12,7 +12,7 @@ router.get('/', function(req, res) {
     }
 
     res.json({
-      count: notes.count,
+      count: notes.length,
       notes: notes
     });
   });
