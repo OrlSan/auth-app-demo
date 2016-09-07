@@ -38,7 +38,7 @@ router.post('/', function(req, res) {
       if (valid) {
         // Emitir un Token y guardarlo en el usuario, y luego lo regresamos en
         // la respuesta de la petición
-        user.token = uuid.v4();
+        user.secret = uuid.v4();
 
         user.save(function(saveErr) {
           if (saveErr) {
@@ -48,7 +48,7 @@ router.post('/', function(req, res) {
             });
           }
 
-          return res.json({ success: true, token: user.token });
+          return res.json({ success: true, secret: user.secret });
         });
       } else {
         return res.status(401).json({

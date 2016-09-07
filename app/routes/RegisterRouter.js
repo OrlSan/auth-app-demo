@@ -33,7 +33,7 @@ router.post('/new', function(req, res) {
         if (saveErr) {
           if (saveErr) return res.json({ success: false, message: "No se pudo guardar" });
         } else {
-          return res.json({ success: true, message: "Usuario registrado correctamente. Ve a Login" });
+          return res.json({ success: true, sub: user._id });
         }
       });
     });

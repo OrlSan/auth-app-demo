@@ -8,7 +8,7 @@ var UserSchema = mongoose.Schema({
     unique: true,
     required: true
   },
-  token: String,
+  secret: String,
   password: String,
   age: Number
 });

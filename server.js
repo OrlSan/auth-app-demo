@@ -1,5 +1,5 @@
 var express = require('express'),
-    passport = require('passport'),
+    authenticate = require('./config/authenticate');
     logger = require('morgan'),
     bodyParser = require('body-parser');
     mongoose = require('mongoose');
@@ -8,7 +8,6 @@ var express = require('express'),
 var app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
-require('./config/passport')(passport);
 
 // conectar a la base de datos
 mongoose.connect('mongodb://localhost/authApp');
@@ -26,13 +25,15 @@ app.get('/', function(req, res) {
 app.post('/', function(req, res) {
   console.log(req.body);
   res.json({ success: true, message: "POST correcto" });
-})
+});
 
 // Usar los Routers
 app.use('/auth', AuthRouter);
 app.use('/register', RegisterRouter);
-app.use('/profile', passport.authenticate('bearer', { session: false }), ProfileRouter);
-app.use('/note', passport.authenticate('bearer', { session: false }), NotesRouter);
+// app.use('/profile', passport.authenticate('jwt', { session: false }), ProfileRouter);
+// app.use('/note', passport.authenticate('jwt', { session: false }), NotesRouter);
+app.use('/profile', authenticate, ProfileRouter);
+app.use('/note', authenticate, NotesRouter);
 
 
 app.listen(8080, function() {
